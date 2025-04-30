@@ -1,0 +1,27 @@
+form{
+    display: inline-block;
+}
+
+.search-name{
+    font-size: 30px;
+}
+
+.search-img{
+    height: 150px;
+}
+
+.search-cont{
+    width: 200px;
+    height: 350px;
+    overflow: hidden;
+    display: inline-block;
+    text-align: center;
+    border: solid 1px;
+    margin-top: 5px;
+}
+
+.search-cont .ran{
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+}
