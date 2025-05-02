@@ -1,5 +1,3 @@
-const dishNames = [];
-const dishImgSrc = [];
 let count = 1;
 const inputValue = document.querySelector(".input");
 let data1 = "";
@@ -15,11 +13,6 @@ fetch("https://foodster-idg1.onrender.com/api/dishes")
     console.log(dishNames)
 
     data1 = data;
-
-    if(inputValue) {
-        // dishNames.map(el => el.includes(inputValue))
-        // console.log(el)
-    }
 })
 .catch(console.error);
 
@@ -28,13 +21,13 @@ document.querySelector("form").addEventListener("submit", function(event) {
     event.preventDefault(); // ⛔ Prevents the form from reloading the page
     document.querySelector(".container").innerHTML = '';
     console.log("Form submitted without reloading!");
-        dishNames.map(el => {
-             if (el.toLowerCase().includes(inputValue.value.toLowerCase())) {
+        dish1.map(el => {
+             if (el.dishName.toLowerCase().includes(inputValue.value.toLowerCase())) {
                 console.log(el);
                 document.querySelector(".container").innerHTML += `
                 <div class="search-cont">
                 <h1 class="search-name">${el}</h1>
-                <img class="search-img" src="${dishImgSrc[dishNames.indexOf(el)]}">
+                <img class="search-img" src="${el.dishImgSrc}">
                 </div>
                 `;
                 count++; //only 3 option per page 
@@ -61,13 +54,12 @@ document.querySelector(".random-btn").addEventListener("click", () => {
 document.querySelector("#selector").addEventListener("change", function () {
     if(this.value === "main dish" || this.value === "dessert" || this.value === "snack") {
         document.querySelector(".container").innerHTML = '';
-        let chDishByCate = [];
         data1.map((el) => {
             if(el.category === this.value) {
                 document.querySelector(".container").innerHTML += `
-                <div class="search-cont">
+                <div class="search-cont-pag">
                 <h1 class="search-name">${el.dishName}</h1>
-                <img class="ran search-img" src="${el.dishImgSrc}">
+                <img class="search-img" src="${el.dishImgSrc}">
                 </div>
                 `;  
             }

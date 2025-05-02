@@ -19,6 +19,23 @@ form{
     width: 32%;
     position: relative;
     height: auto;
+    overflow: hidden;
+    display: inline-block;
+    text-align: center;
+    border: solid 1px;
+    margin-top: 5px;
+}
+
+.pagination-flex{
+    display: inline-flex;
+    align-items: center;
+ 
+}
+
+.search-cont-pag{ 
+    width: 32%;
+    position: relative;
+    overflow: hidden;
     display: inline-block;
     text-align: center;
     border: solid 1px;
