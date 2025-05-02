@@ -1,6 +1,7 @@
 let count = 1;
 const inputValue = document.querySelector(".input");
 let data1 = "";
+let ids = [];
 
 fetch("https://foodster-idg1.onrender.com/api/dishes")
 .then(res => res.json())
@@ -16,19 +17,22 @@ document.querySelector("form").addEventListener("submit", function(event) {
     event.preventDefault(); // ⛔ Prevents the form from reloading the page
     document.querySelector(".container").innerHTML = '';
     console.log("Form submitted without reloading!");
-        dish1.map(el => {
-             if (el.dishName.toLowerCase().includes(inputValue.value.toLowerCase())) {
+        data1.map(el => {
+            if (el.dishName.toLowerCase().includes(inputValue.value.toLowerCase())) {
                 console.log(el);
                 document.querySelector(".container").innerHTML += `
-                <div class="search-cont">
-                <h1 class="search-name">${el}</h1>
+                <div class="search-cont" id="a${el.id}">
+                <h1 class="search-name">${el.dishName}</h1>
                 <img class="search-img" src="${el.dishImgSrc}">
                 </div>
                 `;
                 count++; //only 3 option per page 
-                console.log(dishImgSrc, count)
+                ids.push(el.id);
             }
+            
+            console.log(ids)
         })
+        openOnePage ()
         inputValue.value = "";
   });
 
@@ -58,13 +62,17 @@ document.querySelector("#selector").addEventListener("change", function () {
         data1.map((el) => {
             if(el.category === this.value) {
                 document.querySelector(".container").innerHTML += `
-                <div class="search-cont-pag">
+                <div class="search-cont-pag" id="a${el.id}">
                 <h1 class="search-name">${el.dishName}</h1>
                 <img class="search-img" src="${el.dishImgSrc}">
                 </div>
                 `;  
+                ids.push(el.id);
             }
+            
         });
+
+    openOnePage ()
 
     } else {
         document.querySelector(".container").innerHTML = '';
@@ -74,3 +82,31 @@ document.querySelector("#selector").addEventListener("change", function () {
         console.log(this.value)
     }
 })
+
+//onepage for category and search
+function openOnePage () {
+    ids.map((elId) => {
+        document.querySelector(`#a${elId}`).addEventListener("click", () => {
+            data1.map((el) => {
+              if (el.id === elId) {
+                document.querySelector(".container").innerHTML = "";
+                document.querySelector(".container").innerHTML += `
+                <div class="search-cont">
+                <h1 class="ran search-name">${el.dishName}</h1>
+                <img class="ran search-img" src="${el.dishImgSrc}">
+                <p class="title">Ingredients:</p>
+                <p>${el.dishIngredients.map(el => el.join(' ')).join('<br>')}</p>
+                <p class="title">Preparation steps:</p>
+                <p>-${el.dishPrepSteps.join('<br><br>-')}</p>
+                <a class="src" href="${el.source}">Source</a>
+                <p>author: ${el.author}</p>
+                </div>
+                `;
+                document.querySelector(".search-cont").style.width = "100%";
+            }  
+            })
+            
+        })
+    })
+    ids = [];
+}
