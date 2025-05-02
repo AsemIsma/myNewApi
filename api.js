@@ -61,17 +61,22 @@ document.querySelector(".random-btn").addEventListener("click", () => {
 document.querySelector("#selector").addEventListener("change", function () {
     if(this.value === "main dish" || this.value === "dessert" || this.value === "snack") {
         document.querySelector(".container").innerHTML = '';
-        document.querySelector(".container").innerHTML += `
-        <div class="search-cont">
-        <h1 class="search-name">Great category</h1>
-        </div>
-        `;
+        let chDishByCate = [];
+        data1.map((el) => {
+            if(el.category === this.value) {
+                document.querySelector(".container").innerHTML += `
+                <div class="search-cont">
+                <h1 class="search-name">${el.dishName}</h1>
+                <img class="ran search-img" src="${el.dishImgSrc}">
+                </div>
+                `;  
+            }
+        });
+
     } else {
         document.querySelector(".container").innerHTML = '';
         document.querySelector(".container").innerHTML += `
-        <div class="search-cont">
         <h1 class="search-name">Please choose category.</h1>
-        </div>
         `;
         console.log(this.value)
     }
