@@ -6,11 +6,6 @@ fetch("https://foodster-idg1.onrender.com/api/dishes")
 .then(res => res.json())
 .then(data => {
     console.log(data);
-    data.map((el) => {
-        dishNames.push(el.dishName);
-        dishImgSrc.push(el.dishImgSrc);
-    })
-    console.log(dishNames)
 
     data1 = data;
 })
@@ -46,6 +41,12 @@ document.querySelector(".random-btn").addEventListener("click", () => {
     <div class="search-cont-ran">
     <h1 class="ran search-name">${data1[ranDish].dishName}</h1>
     <img class="ran search-img" src="${data1[ranDish].dishImgSrc}">
+    <p class="title">Ingredients:</p>
+    <p>${data1[ranDish].dishIngredients.map(el => el.join(' ')).join('<br>')}</p>
+    <p class="title">Preparation steps:</p>
+    <p>-${data1[ranDish].dishPrepSteps.join('<br><br>-')}</p>
+    <a class="src" href="${data1[ranDish].source}">Source</a>
+    <p>author: ${data1[ranDish].author}</p>
     </div>
     `;
 }); //add flex
