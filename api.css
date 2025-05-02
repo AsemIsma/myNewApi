@@ -1,3 +1,7 @@
+.all{
+    display: flex;
+}
+
 form{
     display: inline-block;
 }

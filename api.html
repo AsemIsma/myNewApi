@@ -7,14 +7,25 @@
     <link rel="stylesheet" href="api.css">
 </head>
 <body>
+    <div class="all">
+
     <div class="searchbar-cont">
     <form>
         <input type="text" class="input" value="">
         <button type="submit" class="sub-btn">Search</button>
     </form>
     <button class="random-btn">random</button>
+
+    <select id="selector" name="category">
+        <option value="none">Select category</option>
+        <option value="main dish">Main dish</option>
+        <option value="dessert">Dessert</option>
+        <option value="snack">Snack</option>
+    </select>
     </div>
-    <div class="container"></div>
+    <div class="container"></div> 
+    </div>
+
 
     <script src="api.js"></script>
 </body>

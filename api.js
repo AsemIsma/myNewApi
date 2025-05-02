@@ -23,35 +23,56 @@ fetch("https://foodster-idg1.onrender.com/api/dishes")
 })
 .catch(console.error);
 
-// document.querySelector("form").addEventListener("submit", function(event) {
-//     event.preventDefault(); // ⛔ Prevents the form from reloading the page
-//     document.querySelector(".container").innerHTML = '';
-//     console.log("Form submitted without reloading!");
-//         dishNames.map(el => {
-//              if (el.toLowerCase().includes(inputValue.value.toLowerCase())) {
-//                 console.log(el);
-//                 document.querySelector(".container").innerHTML += `
-//                 <div class="search-cont">
-//                 <h1 class="search-name">${el}</h1>
-//                 <img class="search-img" src="${dishImgSrc[dishNames.indexOf(el)]}">
-//                 </div>
-//                 `;
-//                 count++; 
-//                 console.log(dishImgSrc, count)
-//             }
-//         })
-//         inputValue.value = "";
-//   });
+//search
+document.querySelector("form").addEventListener("submit", function(event) {
+    event.preventDefault(); // ⛔ Prevents the form from reloading the page
+    document.querySelector(".container").innerHTML = '';
+    console.log("Form submitted without reloading!");
+        dishNames.map(el => {
+             if (el.toLowerCase().includes(inputValue.value.toLowerCase())) {
+                console.log(el);
+                document.querySelector(".container").innerHTML += `
+                <div class="search-cont">
+                <h1 class="search-name">${el}</h1>
+                <img class="search-img" src="${dishImgSrc[dishNames.indexOf(el)]}">
+                </div>
+                `;
+                count++; //only 3 option per page 
+                console.log(dishImgSrc, count)
+            }
+        })
+        inputValue.value = "";
+  });
 
-// document.querySelector(".random-btn").addEventListener("click", () => {
-//     document.querySelector(".container").innerHTML = "";
-//     let ranDish = Math.round(Math.random() * (data1.length - 1));
-//     console.log(ranDish)
-//     document.querySelector(".container").innerHTML += `
-//     <div class="ran search-cont">
-//     <h1 class="ran search-name">${data1[ranDish].dishName}</h1>
-//     <img class="ran search-img" src="${data1[ranDish].dishImgSrc}">
-//     </div>
-//     `;
-// });
+  //random
+document.querySelector(".random-btn").addEventListener("click", () => {
+    document.querySelector(".container").innerHTML = "";
+    let ranDish = Math.round(Math.random() * (data1.length - 1));
+    console.log(ranDish)
+    document.querySelector(".container").innerHTML += `
+    <div class="ran search-cont">
+    <h1 class="ran search-name">${data1[ranDish].dishName}</h1>
+    <img class="ran search-img" src="${data1[ranDish].dishImgSrc}">
+    </div>
+    `;
+}); //add flex
 
+//category
+document.querySelector("#selector").addEventListener("change", function () {
+    if(this.value === "main dish" || this.value === "dessert" || this.value === "snack") {
+        document.querySelector(".container").innerHTML = '';
+        document.querySelector(".container").innerHTML += `
+        <div class="search-cont">
+        <h1 class="search-name">Great category</h1>
+        </div>
+        `;
+    } else {
+        document.querySelector(".container").innerHTML = '';
+        document.querySelector(".container").innerHTML += `
+        <div class="search-cont">
+        <h1 class="search-name">Please choose category.</h1>
+        </div>
+        `;
+        console.log(this.value)
+    }
+})
