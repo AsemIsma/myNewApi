@@ -8,6 +8,7 @@ form{
 
 .search-name{
     font-size: 30px;
+    margin: 0px;
 }
 
 .search-img{
@@ -15,17 +16,22 @@ form{
 }
 
 .search-cont{
-    width: 200px;
-    height: 350px;
-    overflow: hidden;
+    width: 32%;
+    position: relative;
+    height: auto;
     display: inline-block;
     text-align: center;
     border: solid 1px;
     margin-top: 5px;
 }
 
-.search-cont .ran{
+.search-cont-ran{
     width: 100%;
     height: auto;
+    overflow: hidden;
+    display: inline-block;
+    text-align: center;
+    border: solid 1px;
+    margin-top: 5px;
     overflow: hidden;
 }

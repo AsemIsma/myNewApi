@@ -50,7 +50,7 @@ document.querySelector(".random-btn").addEventListener("click", () => {
     let ranDish = Math.round(Math.random() * (data1.length - 1));
     console.log(ranDish)
     document.querySelector(".container").innerHTML += `
-    <div class="ran search-cont">
+    <div class="search-cont-ran">
     <h1 class="ran search-name">${data1[ranDish].dishName}</h1>
     <img class="ran search-img" src="${data1[ranDish].dishImgSrc}">
     </div>
