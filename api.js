@@ -1,112 +1,150 @@
 let count = 1;
 const inputValue = document.querySelector(".input");
-let data1 = "";
+let data1 = [];
 let ids = [];
+let searchResults = [];
 
 fetch("https://foodster-idg1.onrender.com/api/dishes")
-.then(res => res.json())
-.then(data => {
-    console.log(data);
+    .then(res => res.json())
+    .then(data => {
+        data1 = data;
+    })
+    .catch(console.error);
 
-    data1 = data;
-})
-.catch(console.error);
+// ===== SEARCH =====
+document.querySelector("form").addEventListener("submit", function (event) {
+    event.preventDefault();
+    const value = inputValue.value.toLowerCase();
+    searchResults = data1.filter(el => el.dishName.toLowerCase().includes(value));
+    renderSearchPage(1); // Show first page
+    createSearchPagination();
+    inputValue.value = "";
+});
 
-//search
-document.querySelector("form").addEventListener("submit", function(event) {
-    event.preventDefault(); // ⛔ Prevents the form from reloading the page
+// ===== RENDER SEARCH PAGE =====
+function renderSearchPage(pageNumber) {
     document.querySelector(".container").innerHTML = '';
-    console.log("Form submitted without reloading!");
-        data1.map(el => {
-            if (el.dishName.toLowerCase().includes(inputValue.value.toLowerCase())) {
-                console.log(el);
-                document.querySelector(".container").innerHTML += `
-                <div class="search-cont" id="a${el.id}">
-                <h1 class="search-name">${el.dishName}</h1>
-                <img class="search-img" src="${el.dishImgSrc}">
-                </div>
-                `;
-                count++; //only 3 option per page 
-                ids.push(el.id);
-            }
-            
-            console.log(ids)
-        })
-        openOnePage ()
-        inputValue.value = "";
-  });
+    const itemsPerPage = 3;
+    const start = (pageNumber - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
 
-  //random
+    const pageItems = searchResults.slice(start, end);
+    ids = []; // reset ids
+    pageItems.forEach(el => {
+        ids.push(el.id);
+        const div = document.createElement("div");
+        div.className = "search-cont-pag";
+        div.id = `a${el.id}`;
+        div.innerHTML = `
+            <h1 class="search-name">${el.dishName}</h1>
+            <img class="search-img" src="${el.dishImgSrc}">
+        `;
+        document.querySelector(".container").appendChild(div);
+    });
+
+    openOnePage();
+}
+
+// ===== CREATE PAGINATION FOR SEARCH =====
+function renderSearchPage(pageNumber) {
+    const container = document.querySelector(".container");
+    container.innerHTML = '';
+    const itemsPerPage = 3;
+    const start = (pageNumber - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+
+    const pageItems = searchResults.slice(start, end);
+    ids = []; // reset ids
+    pageItems.forEach(el => {
+        ids.push(el.id);
+        const div = document.createElement("div");
+        div.className = "search-cont-pag";
+        div.id = `a${el.id}`;
+        div.innerHTML = `
+            <h1 class="search-name">${el.dishName}</h1>
+            <img class="search-img" src="${el.dishImgSrc}">
+        `;
+        container.appendChild(div);
+    });
+
+    openOnePage();
+}
+
+function createSearchPagination() {
+    const pagDiv = document.querySelector(".pagination");
+    pagDiv.innerHTML = ''; // clear previous buttons
+
+    const itemsPerPage = 3;
+    const pageCount = Math.ceil(searchResults.length / itemsPerPage);
+
+    for (let i = 1; i <= pageCount; i++) {
+        const btn = document.createElement("button");
+        btn.textContent = i;
+        btn.addEventListener("click", () => {
+            renderSearchPage(i);
+        });
+        pagDiv.appendChild(btn);
+    }
+}
+
+// ===== RANDOM =====
 document.querySelector(".random-btn").addEventListener("click", () => {
     document.querySelector(".container").innerHTML = "";
-    let ranDish = Math.round(Math.random() * (data1.length - 1));
-    console.log(ranDish)
+    let ranDish = Math.floor(Math.random() * data1.length);
+    const d = data1[ranDish];
     document.querySelector(".container").innerHTML += `
-    <div class="search-cont-ran">
-    <h1 class="ran search-name">${data1[ranDish].dishName}</h1>
-    <img class="ran search-img" src="${data1[ranDish].dishImgSrc}">
-    <p class="title">Ingredients:</p>
-    <p>${data1[ranDish].dishIngredients.map(el => el.join(' ')).join('<br>')}</p>
-    <p class="title">Preparation steps:</p>
-    <p>-${data1[ranDish].dishPrepSteps.join('<br><br>-')}</p>
-    <a class="src" href="${data1[ranDish].source}">Source</a>
-    <p>author: ${data1[ranDish].author}</p>
-    </div>
+        <div class="search-cont">
+            <h1 class="ran search-name">${d.dishName}</h1>
+            <img class="ran search-img" src="${d.dishImgSrc}">
+            <p class="title">Ingredients:</p>
+            <p>${d.dishIngredients.map(el => el.join(' ')).join('<br>')}</p>
+            <p class="title">Preparation steps:</p>
+            <p>-${d.dishPrepSteps.join('<br><br>-')}</p>
+            <a class="src" href="${d.source}">Source</a>
+            <p>author: ${d.author}</p>
+        </div>
     `;
-}); //add flex
+    document.querySelector(".search-cont").style.width = "100%";
+});
 
-//category
+// ===== CATEGORY FILTER =====
 document.querySelector("#selector").addEventListener("change", function () {
-    if(this.value === "main dish" || this.value === "dessert" || this.value === "snack") {
-        document.querySelector(".container").innerHTML = '';
-        data1.map((el) => {
-            if(el.category === this.value) {
-                document.querySelector(".container").innerHTML += `
-                <div class="search-cont-pag" id="a${el.id}">
-                <h1 class="search-name">${el.dishName}</h1>
-                <img class="search-img" src="${el.dishImgSrc}">
-                </div>
-                `;  
-                ids.push(el.id);
-            }
-            
-        });
-
-    openOnePage ()
-
+    const cat = this.value;
+    if (["main dish", "dessert", "snack"].includes(cat)) {
+        searchResults = data1.filter(el => el.category === cat);
+        renderSearchPage(1);
+        createSearchPagination();
     } else {
-        document.querySelector(".container").innerHTML = '';
-        document.querySelector(".container").innerHTML += `
-        <h1 class="search-name">Please choose category.</h1>
+        document.querySelector(".container").innerHTML = `
+            <h1 class="search-name">Please choose a category.</h1>
         `;
-        console.log(this.value)
     }
-})
+});
 
-//onepage for category and search
-function openOnePage () {
-    ids.map((elId) => {
-        document.querySelector(`#a${elId}`).addEventListener("click", () => {
-            data1.map((el) => {
-              if (el.id === elId) {
-                document.querySelector(".container").innerHTML = "";
-                document.querySelector(".container").innerHTML += `
-                <div class="search-cont">
-                <h1 class="ran search-name">${el.dishName}</h1>
-                <img class="ran search-img" src="${el.dishImgSrc}">
-                <p class="title">Ingredients:</p>
-                <p>${el.dishIngredients.map(el => el.join(' ')).join('<br>')}</p>
-                <p class="title">Preparation steps:</p>
-                <p>-${el.dishPrepSteps.join('<br><br>-')}</p>
-                <a class="src" href="${el.source}">Source</a>
-                <p>author: ${el.author}</p>
-                </div>
-                `;
+// ===== OPEN ONE FULL RECIPE PAGE =====
+function openOnePage() {
+    ids.forEach(elId => {
+        const card = document.querySelector(`#a${elId}`);
+        if (card) {
+            card.addEventListener("click", () => {
+                const dish = data1.find(d => d.id === elId);
+                if (dish) {
+                    document.querySelector(".container").innerHTML = `
+                        <div class="search-cont">
+                            <h1 class="ran search-name">${dish.dishName}</h1>
+                            <img class="ran search-img" src="${dish.dishImgSrc}">
+                            <p class="title">Ingredients:</p>
+                            <p>${dish.dishIngredients.map(el => el.join(' ')).join('<br>')}</p>
+                            <p class="title">Preparation steps:</p>
+                            <p>-${dish.dishPrepSteps.join('<br><br>-')}</p>
+                            <a class="src" href="${dish.source}">Source</a>
+                            <p>author: ${dish.author}</p>
+                        </div>
+                    `;
+                }
                 document.querySelector(".search-cont").style.width = "100%";
-            }  
-            })
-            
-        })
-    })
-    ids = [];
+            });
+        }
+    });
+    
 }
