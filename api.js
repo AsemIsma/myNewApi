@@ -143,6 +143,7 @@ function openOnePage() {
                     `;
                 }
                 document.querySelector(".search-cont").style.width = "100%";
+                document.querySelector(".pagination").innerHTML = '';
             });
         }
     });
